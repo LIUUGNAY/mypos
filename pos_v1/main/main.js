@@ -5,6 +5,7 @@ function printReceipt(inputs) {
     split[i] = inputs[i].split("-");
     for (let j = 0; j < split.length; j++) {
         console.log(split);
+        
     }
   }
 }
