@@ -1,37 +1,36 @@
-//TODO: Please write code in this file.
 function printReceipt(inputs) {
   let item;
-  let  item_arr = [];
+  let  itemArr = [];
   let total = 0;
   let text ="***<没钱赚商店>收据***\n";
   for (let i = 0; i <inputs.length;i++)
   {
     item = inputs[i];
-    if (item_arr.length == 0)
+    if (itemArr.length == 0)
     {
       item.count = 1;
-      item_arr.push(item);
+      itemArr.push(item);
     }
     else {
-      for (let j = 0; j < item_arr.length; j++) {
-        if (inputs[i].name == item_arr[j].name) {
-          item_arr[j].count++;
+      for (let j = 0; j < itemArr.length; j++) {
+        if (inputs[i].name == itemArr[j].name) {
+          itemArr[j].count++;
         }
-        else if ( j == item_arr.length-1)
+        else if ( j == itemArr.length-1)
         {
-          item_arr.push(item);
+          itemArr.push(item);
           item.count = 0;
         }
       }
     }
   }
 
-  for (let n = 0;n < item_arr.length;n++)
+  for (let n = 0;n < itemArr.length;n++)
   {
 
-    text += "名称：" + item_arr[n].name +"，数量：" +item_arr[n].count+item_arr[n].unit+"，单价："+item_arr[n].price+".00(元)"+"，小计："+item_arr[n].price*item_arr[n].count+".00(元)\n";
+    text += "名称：" + itemArr[n].name +"，数量：" +itemArr[n].count+itemArr[n].unit+"，单价："+itemArr[n].price+".00(元)"+"，小计："+itemArr[n].price*itemArr[n].count+".00(元)\n";
 
-    total += item_arr[n].price*item_arr[n].count;
+    total += itemArr[n].price*itemArr[n].count;
 
   }
 
@@ -40,4 +39,5 @@ function printReceipt(inputs) {
   console.log(text);
 
 }
+
 
