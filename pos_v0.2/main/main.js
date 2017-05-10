@@ -1,56 +1,87 @@
-//TODO: Please write code in this file.
-function printReceipt(inputs) {
-  let item;
-  let  item_arr = [];
-  let total = 0;
-  let array,arr = [];
-   array = loadAllItems();
-  for (let p = 0;p<inputs.length;p++)
+
+
+
+function printReceipt(tags) {
+  const allItems = loadAllItems();
+  const inputsArr = findItemBarcode(tags,allItems);
+  const cartItems = findInputsCount(inputsArr);
+  const cartTotal = getCartTotal(cartItems).cartTotal;
+  const printItems = getCartTotal(cartItems).printItems;
+  const receiptText = buildPrintReceipt(printItems,cartTotal);
+  console.log(receiptText);
+}
+
+
+function findItemBarcode(inputs,allItems) {
+  let inputsArr = [];
+  for (let i = 0;i<inputs.length;i++)
   {
-    for (let q = 0;q < array.length;q++)
-    if (inputs[p] == array[q].barcode)
-    {
-      arr.push(array[q]);
-    }
+    for (let j = 0;j<allItems.length;j++)
+      if (inputs[i] == allItems[j].barcode)
+      {
+        inputsArr.push(allItems[j]);
+      }
   }
+  return inputsArr;
+}
 
 
-
-  let text ="***<没钱赚商店>收据***\n";
-
-  for (let i = 0; i <arr.length;i++)
+function findInputsCount(inputsArr) {
+  let inputItem;
+  let cartItems = [];
+  for (let i = 0; i <inputsArr.length;i++)
   {
-    item = arr[i];
-    if (item_arr.length == 0)
+    inputItem = inputsArr[i];
+    if (cartItems.length == 0)
     {
-      item.count = 1;
-      item_arr.push(item);
+      inputItem.count = 1;
+      cartItems.push(inputItem);
     }
     else {
-      for (let j = 0; j < item_arr.length; j++) {
-        if (arr[i].barcode == item_arr[j].barcode) {
-          item_arr[j].count++;
-        }
-        else if ( j == item_arr.length-1)
-        {
-          item_arr.push(item);
-          item.count = 0;
-        }
-      }
+      searchCount(inputItem,cartItems);
     }
   }
-
-  for (let n = 0;n < item_arr.length;n++)
-  {
-
-    text += "名称：" + item_arr[n].name +"，数量：" +item_arr[n].count+item_arr[n].unit+"，单价："+item_arr[n].price+".00(元)"+"，小计："+item_arr[n].price*item_arr[n].count+".00(元)\n";
-
-    total += item_arr[n].price*item_arr[n].count;
-
-  }
-
-  text = text + "----------------------" + "\n总计：" + total +".00(元)\n" +"**********************" ;
-
-  console.log(text);
-
+  return cartItems;
 }
+
+
+function searchCount(inputItem,cartItems) {
+  for (let j = 0; j < cartItems.length; j++)
+  {
+    if (inputItem.name == cartItems[j].name)
+    {
+      cartItems[j].count++;
+    }
+    else if ( j == cartItems.length-1)
+    {
+      inputItem.count = 0;
+      cartItems.push(inputItem);
+    }
+  }
+}
+
+
+function getCartTotal(cartItems) {
+  let cartTotal = 0,printItems = [];
+  for (let n = 0;n < cartItems.length;n++)
+  {
+    printItems.push( "名称：" + cartItems[n].name +"，数量：" +cartItems[n].count+cartItems[n].unit+"，单价："+cartItems[n].price+".00(元)"+"，小计："+cartItems[n].price*cartItems[n].count+".00(元)\n");
+    cartTotal += cartItems[n].price*cartItems[n].count;
+  }
+  return  { cartTotal, printItems};
+}
+
+
+
+function buildPrintReceipt(printItem,cartTotal) {
+  let text = "***<没钱赚商店>收据***\n";
+  text += printItem.join('');
+  text = text +"----------------------\n"+"总计："+cartTotal+".00(元)\n"+"**********************";
+  return text;
+}
+
+
+
+
+
+
